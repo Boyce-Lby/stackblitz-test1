@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 const props = defineProps<{
   list: any[];
 }>();
@@ -38,9 +38,27 @@ onMounted(() => {
   init();
   console.log(waterList);
 });
+import gsap from 'gsap';
+const myNum = reactive({
+  current: 0,
+  tweenedNumber: 0,
+});
+watch(
+  () => myNum.current,
+  (newVal, oldVal) => {
+    gsap.to(myNum, {
+      duration: 1,
+      tweenedNumber: newVal,
+    });
+  }
+);
 </script>
 
 <template>
+  <div>
+    <input v-model="myNum.current" step="20" type="number" />
+    <div>{{ myNum.tweenedNumber.toFixed(0) }}</div>
+  </div>
   <div class="wraps">
     <div
       :style="{
